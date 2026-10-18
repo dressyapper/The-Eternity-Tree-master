@@ -697,11 +697,12 @@ addLayer("S", {
                 
                 let gain = layerS.getcoregain()
                 let buyables = [getBuyableAmount("S", 11), getBuyableAmount("S", 12), getBuyableAmount("S", 13), getBuyableAmount("S", 14), getBuyableAmount("S", 15)]
-                let milestone = [4,6]
-                for (i in milestone) {
-                    if (!hasMilestone("S", milestone[i])) {
-                        milestone.splice(milestone.indexOf(milestone[i]), 1)
-                    }
+                let milestone = []
+                if (hasMilestone("S", 4)) {
+                    milestone.push(4)
+                }
+                if (hasMilestone("S", 6)) {
+                    milestone.push(6)
                 }
                 player.points = new Decimal(0)
                 layerDataReset(this.layer, ["supercores"])
