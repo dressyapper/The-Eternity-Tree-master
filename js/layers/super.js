@@ -411,7 +411,7 @@ addLayer("S", {
         4: {
             requirementDescription: "50000 Supercores",
             effectDescription: "10x Super",
-            unlocked() {return getBuyableAmount("S", 11) >= 255},
+            unlocked() {return player.S.supercores.gte(10000)},
             done() {return player.S.supercores.gte(50000)},
         },
         5: {
