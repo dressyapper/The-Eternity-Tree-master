@@ -138,14 +138,14 @@ addLayer("C", {
             description: "9x Supercores",
             cost: new Decimal(2),
             branches: [],
-            unlocked() {return hasUpgrade("C", 22)}
+            unlocked() {return hasUpgrade("C", 33)}
         },
         44: {
             title: "Supercore Shopping",
             description: "Double all supercore buyable caps",
             cost: new Decimal(2),
             branches: [54],
-            unlocked() {return hasUpgrade("C", 22)}
+            unlocked() {return hasUpgrade("C", 33)}
         },
 
         //no effect
