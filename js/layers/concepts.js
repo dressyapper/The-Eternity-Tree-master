@@ -12,9 +12,14 @@ addLayer("C", {
     baseResource: "Super", // Name of resource prestige is based on
     baseAmount() {return player.S.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.1, // Prestige currency exponent
+    exponent: 1.1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        return mult
+    },
+    directMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        if (hasMilestone("C", 4)) mult = mult.times(2)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -53,14 +58,14 @@ addLayer("C", {
         31: {
             title: "Point factory",
             description: "16x points",
-            cost: new Decimal(2),
+            cost: new Decimal(1),
             branches: [41],
             unlocked() {return hasUpgrade("C", 21)}
         },
         32: {
             title: "Super Increment",
             description: "4x super",
-            cost: new Decimal(3),
+            cost: new Decimal(1),
             branches: [42],
             unlocked() {return hasUpgrade("C", 22)}
         },
@@ -74,7 +79,8 @@ addLayer("C", {
         41: {
             title: "Conceptpoints",
             description: "Concepts boosts points",
-            cost: new Decimal(4),
+            cost: new Decimal(2),
+            branches: [51],
             effectCap() {
                 let cap = new Decimal(1e40)
 
@@ -105,7 +111,8 @@ addLayer("C", {
         42: {
             title: "SuperConcept",
             description: "Concepts boosts Super",
-            cost: new Decimal(4),
+            cost: new Decimal(2),
+            branches: [52],
             effectCap() {
                 let cap = new Decimal(1e40)
 
@@ -136,40 +143,77 @@ addLayer("C", {
         43: {
             title: "Supercore Industry",
             description: "9x Supercores",
-            cost: new Decimal(2),
-            branches: [],
+            cost: new Decimal(1),
+            branches: [53],
             unlocked() {return hasUpgrade("C", 33)}
         },
         44: {
             title: "Supercore Shopping",
             description: "Double all supercore buyable caps",
             cost: new Decimal(2),
-            branches: [54],
+            branches: [54, 55],
             unlocked() {return hasUpgrade("C", 33)}
         },
-
-        //no effect
-        54: {
-            title: "SuperchargerBoost?",
-            description: "Supercharger cost is always 10",
-            cost: new Decimal(1),
-            branches: [64],
-            unlocked() {return false}
+        51: {
+            title: "Point Planet",
+            description: "100x Points",
+            cost: new Decimal(3),
+            branches: [],
+            unlocked() {return hasUpgrade("C", 41)}
         },
-        64: {
-            title: "SuperchargerMax",
-            description: "You can now buy max Supercharger",
+        52: {
+            title: "Super System",
+            description: "100x Super",
+            cost: new Decimal(4),
+            branches: [],
+            unlocked() {return hasUpgrade("C", 42)}
+        },
+        53: {
+            title: "Supercore Star",
+            description: "100x Supercores",
             cost: new Decimal(5),
             branches: [],
-            unlocked() {return false}
+            unlocked() {return hasUpgrade("C", 43)}
+        },
+        54: {
+            title: "SuperchargeBoost?",
+            description: "Supercharge cost is always 1000 BUT you can Buymax. You can also have decimal amount.",
+            cost: new Decimal(3),
+            branches: [64],
+            unlocked() {return hasUpgrade("C", 44)}
+        },
+        55: {
+            title: "Supercharge^14",
+            description: "Supercharge purcahse limit is ^14 but is applied first (5^14)",
+            cost: new Decimal(2),
+            branches: [64],
+            unlocked() {return hasUpgrade("C", 44)}
         },
     },
     milestones: {
         1: {
-            requirementDescription: "3 Concepts",
+            requirementDescription: "3 Total Concepts",
             effectDescription: "3x points",
             unlocked() {return true},
-            done() {return player.C.points.gte(3)},
+            done() {return player.C.total.gte(3)},
+        },
+        2: {
+            requirementDescription: "6 Total Concepts",
+            effectDescription: "2x Super",
+            unlocked() {return true},
+            done() {return player.C.total.gte(6)},
+        },
+        3: {
+            requirementDescription: "10 Total Concepts",
+            effectDescription: "2x Supercores",
+            unlocked() {return true},
+            done() {return player.C.total.gte(10)},
+        },
+        4: {
+            requirementDescription: "15 Total Concepts",
+            effectDescription: "2x Concepts",
+            unlocked() {return true},
+            done() {return player.C.total.gte(15)},
         },
     
     },

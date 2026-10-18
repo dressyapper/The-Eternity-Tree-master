@@ -124,6 +124,13 @@ addLayer("Ach", {
                 return player.C.points.gte(1)
             },
         },
+        25: {
+            name: "Cooler Concepts",
+            tooltip: "Get 10 Concepts",
+            done() {
+                return player.C.points.gte(10)
+            },
+        },
     },
     clickables: {
         11: {

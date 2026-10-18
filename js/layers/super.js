@@ -32,6 +32,8 @@ addLayer("S", {
         if (hasUpgrade("C", 22)) {mult = mult.times(2)}
         if (hasUpgrade("C", 32)) {mult = mult.times(4)}
         if (hasUpgrade("C", 42)) {mult = mult.times(upgradeEffect("C", 42))}
+        if (hasMilestone("C", 2)) {mult = mult.times(2)}
+        if (hasUpgrade("C", 52)) {mult = mult.times(100)}
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -54,10 +56,12 @@ addLayer("S", {
         let m = new Decimal(1)
 
         m = m.times(buyableEffect("S", 13))
-        if (hasUpgrade("S",32)) m = m.times(upgradeEffect("S", 32))
+        if (hasUpgrade("S",32)) {m = m.times(upgradeEffect("S", 32))}
         m = m.times(buyableEffect("S", 14))
-        if (hasUpgrade("C",33)) m = m.times(3)
-        if (hasUpgrade("C",43)) m = m.times(9)
+        if (hasUpgrade("C",33)) {m = m.times(3)}
+        if (hasUpgrade("C",43)) {m = m.times(9)}
+        if (hasMilestone("C", 3)) {m = m.times(2)}
+        if (hasUpgrade("C", 53)) {m = m.times(100)}
 
         return m
     },
@@ -448,6 +452,7 @@ addLayer("S", {
             purchaseLimit() {
                 
                 let x = new Decimal(5)
+                if (hasUpgrade("C", 55)) x = x.pow(14)
                 x = x.add(new Decimal(getBuyableAmount(this.layer, 12)).times(5))
                 if (hasUpgrade("S", 33)) x = x.times(upgradeEffect("S", 33))
                 if (hasUpgrade("C", 44)) x = x.times(2)
@@ -457,6 +462,7 @@ addLayer("S", {
             cost(x) {
                 let c = new Decimal(new Decimal(1.5).div(new Decimal(1.1).pow(getBuyableAmount(this.layer, 12))).max(1)).pow(x).times(new Decimal(x).div(10).add(1)).floor()
                 
+                if (hasUpgrade("C", 54)) c = new Decimal(1000)
                 return c
             },
             display() {
@@ -477,8 +483,17 @@ addLayer("S", {
             },
             buy() {
                 if (player[this.layer].points.sign == -1) return
-                player.S.supercores = player.S.supercores.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+
+                if (!hasUpgrade("C",54)) {
+                    player.S.supercores = player.S.supercores.sub(this.cost())
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                }
+                else {
+                    let buy = player[this.layer].supercores.div(1000).min(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))
+                    console.log(buy)
+                    player.S.supercores = player.S.supercores.sub(this.cost().times(buy))
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(buy))
+                }
             },
             effectbase(x) {
                 let b = new Decimal(1)
@@ -486,6 +501,7 @@ addLayer("S", {
                 if (hasUpgrade("S", 35)) b = new Decimal(1.5)
                 if (hasUpgrade("S", 42)) b = new Decimal(10)
                 if (hasUpgrade("S", 43)) b = b.add(new Decimal(upgradeEffect("S", 43)))
+                if (hasUpgrade("C", 55)) b = b.add(0.1)
 
                 return b
             },
