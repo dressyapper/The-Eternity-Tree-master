@@ -600,7 +600,7 @@ addLayer("S", {
                 if (hasUpgrade("C", 44)) x = x.times(2)
                 return x
             },
-            unlocked() {return hasAchievement("Ach", 15)},
+            unlocked() {return hasUpgrade("S", 36)},
             cost(x) {
                 let c = new Decimal(1e22).pow(new Decimal(x).div(30).add(1))
                 
@@ -644,7 +644,7 @@ addLayer("S", {
                 if (hasUpgrade("C", 44)) x = x.times(2)
                 return x
             },
-            unlocked() {return hasAchievement("Ach", 15)},
+            unlocked() {return hasMilestone("S", 7)},
             cost(x) {
                 let c = new Decimal(1e50).pow(new Decimal(x).div(100).add(1)).times(new Decimal(x).div(10).max(1).pow(10))
                 
@@ -683,7 +683,7 @@ addLayer("S", {
     },
     clickables: {
         11: {
-            title: "Reset for a Super Core",
+            title: "Reset for Super Core",
             display() {
                 if (layerS.getcoregain().gte(1)) {
                     return "Reset for "+format(layerS.getcoregain().times(tmp.S.coremult))+"<br>Next at "+format(layerS.getcorereq(layerS.getcoregain().add(1)))
