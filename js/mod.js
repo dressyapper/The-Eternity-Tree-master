@@ -1,12 +1,12 @@
 let modInfo = {
-	name: "The ??? Tree",
+	name: "The Eternity Tree",
 	author: "nobody",
 	pointsName: "points",
-	modFiles: ["layers.js", "tree.js"],
+	modFiles: ["layers/super.js","layers/concepts.js", "layers/achievements.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 1,  // In hours
 }
 
@@ -33,15 +33,37 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return true
+	let x = true
+
+	if (player.paused) x = false
+	
+	return x
 }
 
 // Calculate points/sec!
 function getPointGen() {
 	if(!canGenPoints())
-		return new Decimal(0)
+		return new Decimal(0) 
 
 	let gain = new Decimal(1)
+	if (hasUpgrade("S", 11)) {gain = gain.times(2)}
+	if (hasUpgrade("S", 12)) {gain = gain.times(3)}
+	if (hasUpgrade("S", 13)) {gain = gain.times(4)}
+	if (hasUpgrade("S", 15)) {gain = gain.times(upgradeEffect("S", 15))}
+	if (hasUpgrade("S", 16)) {gain = gain.times(1.5)}
+	if (hasUpgrade("S", 21)) {gain = gain.times(2)}
+	if (hasMilestone("S", 1)) {gain = gain.times(3)}
+	if (hasUpgrade("S", 24)) {gain = gain.times(16)}
+	if (hasMilestone("S", 2)) {gain = gain.times(20)}
+	gain = gain.times(buyableEffect("S", 11))
+	if (hasUpgrade("S", 26)) {gain = gain.times(100)}
+	if (hasUpgrade("S", 31)) {gain = gain.times(upgradeEffect("S", 31))}
+	gain = gain.times(buyableEffect("S", 14).pow(0.5+(hasUpgrade("S",45)*0.5)))
+	if (hasUpgrade("S", 41)) {gain = gain.times(upgradeEffect("S", 41))}
+	if (hasUpgrade("C", 21)) {gain = gain.times(4)}
+	if (hasUpgrade("C", 31)) {gain = gain.times(16)}
+	if (hasMilestone("C", 1)) {gain = gain.times(3)}
+	if (hasUpgrade("C", 41)) {gain = gain.times(upgradeEffect("C", 41))}
 	return gain
 }
 
@@ -51,6 +73,21 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+	()=>{
+		if (player.paused) {
+			return "[DISABLED GENERATION]"
+		}
+	},
+	()=>{
+		if (document.URL.split("/")[0] == "file:") {
+			return "YOU ARE IN TESTING MODE"
+		}
+	},
+	()=>{
+		if (!options.autosave) {
+			return "<p style='color:rgb(255,100,100)'>Autosave is disabled"
+		}
+	}
 ]
 
 // Determines when the game "ends"
@@ -75,4 +112,30 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
+}
+
+onkeydown = (ev) => {
+	if (ev.key == "t") {
+		player.paused = !player.paused
+	}
+	if (ev.key == "r") {
+		player.points = new Decimal(0)
+	}
+}
+
+function getHighestUnlockedRow() {
+	let highest = 0
+	for (i in ROW_LAYERS) {
+		if (Number(i) == i) {
+			for (j in ROW_LAYERS[i]) {
+				if (layerShown(j)) {
+					if (i > highest) {
+						highest = i
+					}
+				}
+			}
+		}
+	}
+
+	return highest
 }

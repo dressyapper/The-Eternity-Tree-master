@@ -173,6 +173,7 @@ var systemComponents = {
 				</tr> 
 			<tr>
                 <td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{ formatOption(!options.hideMilestonePopups) }}</button></td>
+				<td><button class="opt" onclick="options.noachspoliers = !options.noachspoliers">Only Show Unlocked Achievements: {{ formatOption(options.noachspoliers) }}</button></td>
             </tr>
         </table>`
     },
