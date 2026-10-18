@@ -131,7 +131,7 @@ addLayer("C", {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 }
             },
-            unlocked() {return hasUpgrade("C", 33)}
+            unlocked() {return hasUpgrade("C", 32)}
         },
         43: {
             title: "Supercore Industry",
