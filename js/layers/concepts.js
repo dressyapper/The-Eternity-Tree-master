@@ -27,7 +27,7 @@ addLayer("C", {
     hotkeys: [
         {key: "C", description: "C: Reset for Concepts", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return hasAchievement("Ach", 22)},
+    layerShown(){return hasAchievement("Ach", 23)},
     upgrades: {
         11: {
             title: "Conceptualize",
@@ -273,6 +273,9 @@ addLayer("C", {
             display() {
                 
             },
+            unlocked() {
+                return document.URL.split("/")[0] == "file:"
+            }
             
         },
     },

@@ -24,9 +24,6 @@ addLayer("Ach", {
             done() {
                 return hasUpgrade("S", 11)
             },
-            unlocked() {
-                return true
-            }
         },
         12: {
             name: "Wow so much",
@@ -43,9 +40,6 @@ addLayer("Ach", {
             done() {
                 return player.S.points.gte(50)
             },
-            unlocked() {
-                return true
-            }
         },
         13: {
             name: "0.5e6",
@@ -62,9 +56,6 @@ addLayer("Ach", {
             done() {
                 return player.S.points.gte(5e5)
             },
-            unlocked() {
-                return true
-            }
         },
         14: {
             name: "Fivecharger",
@@ -81,9 +72,6 @@ addLayer("Ach", {
             done() {
                 return getBuyableAmount("S", 11) >= 5
             },
-            unlocked() {
-                return player.S.supercores.gte(1) || hasAchievement(this.layer, this.id)
-            }
         },
         15: {
             name: "Tencharger",
@@ -100,9 +88,6 @@ addLayer("Ach", {
             done() {
                 return getBuyableAmount("S", 11) >= 10
             },
-            unlocked() {
-                return player.S.supercores.gte(1) || hasAchievement(this.layer, this.id)
-            }
         },
         16: {
             name: "Side B",
@@ -110,9 +95,6 @@ addLayer("Ach", {
             done() {
                 return hasMilestone("S", 6)
             },
-            unlocked() {
-                return hasMilestone("S", 5) || hasAchievement(this.layer, this.id)
-            }
         },
         21: {
             name: "More??",
@@ -120,9 +102,6 @@ addLayer("Ach", {
             done() {
                 return hasUpgrade("S", 36)
             },
-            unlocked() {
-                return hasUpgrade("S", 35)
-            }
         },
         22: {
             name: "50 cores!!",
@@ -130,29 +109,20 @@ addLayer("Ach", {
             done() {
                 return player.S.supercores.gte(1e50)
             },
-            unlocked() {
-                return true
-            }
         },
-        22: {
+        23: {
             name: "40 super",
             tooltip: "Get 1e40 Super",
             done() {
                 return player.S.points.gte(1e40)
             },
-            unlocked() {
-                return true
-            }
         },
-        23: {
+        24: {
             name: "Concepts",
             tooltip: "Reset for a concept",
             done() {
                 return player.C.points.gte(1)
             },
-            unlocked() {
-                return hasAchievement("Ach", 22)
-            }
         },
     },
     clickables: {

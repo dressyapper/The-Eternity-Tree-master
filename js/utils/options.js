@@ -15,7 +15,6 @@ function getStartOptions() {
 		oldStyle: false,
 		forceTooltips: true,
 		hideMilestonePopups: false,
-		noachspoliers: true,
 	}
 }
 
