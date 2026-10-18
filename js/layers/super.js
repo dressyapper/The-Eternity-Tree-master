@@ -795,6 +795,9 @@ addLayer("S", {
                 }],
                 "blank",
                 ["display-text", function() { 
+                    if (hasUpgrade("S", 34)) {
+                        return ""
+                    }
                     return 'You are generating '+format(layerS.getcoregain().times(tmp.S.coremult).times(0.05))+" Cores every second"
                 }],
                 "blank",
