@@ -100,7 +100,7 @@ addLayer("C", {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 }
             },
-            unlocked() {return hasUpgrade("C", 33)}
+            unlocked() {return hasUpgrade("C", 32)}
         },
         42: {
             title: "SuperConcept",

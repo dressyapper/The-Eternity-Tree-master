@@ -334,13 +334,13 @@ addLayer("S", {
         },
         42: {
             title: "Superchargington",
-            description: "Supercharger is now +10x",
+            description: "Supercharge is now +10x",
             cost: new Decimal(3e31),
             unlocked() {return hasUpgrade("S", 41)}
         },
         43: {
-            title: "Supercharger^2",
-            description: "Superchargercharger boosts superchargers effect",
+            title: "Supercharge^2",
+            description: "Superchargecharge boosts supercharges effect",
             cost: new Decimal(1e33),
             effectCap() {
                 let cap = new Decimal(1e100)
@@ -376,7 +376,7 @@ addLayer("S", {
             unlocked() {return hasUpgrade("S", 43)}
         },
         45: {
-            title: "SuperBoostCharger",
+            title: "SuperBoostCharge",
             description: "Make SuperBoost boost points and super without the square root",
             cost: new Decimal(1e34),
             unlocked() {return hasUpgrade("S", 44)}
@@ -415,19 +415,19 @@ addLayer("S", {
             done() {return player.S.supercores.gte(50000)},
         },
         5: {
-            requirementDescription: "2e8 Super and 8 Corechargers",
+            requirementDescription: "2e8 Super and 8 Corecharges",
             effectDescription: "100x Super",
             unlocked() {return getBuyableAmount("S", 13) >= 5 && getBuyableAmount("S", 11) >= 255 || player.C.total.gte(1)},
             done() {return player.S.points.gte(2e8) && getBuyableAmount("S", 13) >= 8},
         },
         6: {
-            requirementDescription: "1e10 Supercores, 255 Superchargers, 50 Superchargerchargers, 10 Corechargers and 1e12 Super",
+            requirementDescription: "1e10 Supercores, 255 Supercharges, 50 Superchargecharges, 10 Corecharges and 1e12 Super",
             effectDescription: "Thats a few goals, unlock more upgrades",
             unlocked() {return hasMilestone("S", 5) || hasMilestone(this.layer, this.id) || player.C.total.gte(1)},
             done() {return player.S.points.gte(1e12) && getBuyableAmount("S", 11) >= 255 && getBuyableAmount("S", 12) >= 50 && getBuyableAmount("S", 13) >= 10 && player.S.supercores.gte(1e10)},
         },
         7: {
-            requirementDescription: "50 Corechargers and 1e20 Super",
+            requirementDescription: "50 Corecharges and 1e20 Super",
             effectDescription: "Unlock another... You guessed it",
             unlocked() {return hasAchievement("Ach", 22) || player.C.total.gte(1)},
             done() {return player.S.points.gte(1e20) && getBuyableAmount("S", 13) >= 50},
