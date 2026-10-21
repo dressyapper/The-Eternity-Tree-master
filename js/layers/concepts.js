@@ -45,30 +45,45 @@ addLayer("C", {
             description: "4x points",
             cost: new Decimal(1),
             branches: [31],
+            canAfford() {
+                return hasUpgrade("C", 11)
+            }
         },
         22: {
             title: "Super Increase",
             description: "2x super",
             cost: new Decimal(1),
             branches: [32,33],
+            canAfford() {
+                return hasUpgrade("C", 11)
+            }
         },
         31: {
             title: "Point factory",
             description: "16x points",
             cost: new Decimal(1),
             branches: [41],
+            canAfford() {
+                return hasUpgrade("C", 21)
+            }
         },
         32: {
             title: "Super Increment",
             description: "4x super",
             cost: new Decimal(1),
             branches: [42],
+            canAfford() {
+                return hasUpgrade("C", 22)
+            }
         },
         33: {
             title: "Supercore Robots",
             description: "3x Supercores",
             cost: new Decimal(1),
             branches: [43,44],
+            canAfford() {
+                return hasUpgrade("C", 22)
+            }
         },
         41: {
             title: "Conceptpoints",
@@ -100,6 +115,9 @@ addLayer("C", {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 }
             },
+            canAfford() {
+                return hasUpgrade("C", 31)
+            }
         },
         42: {
             title: "SuperConcept",
@@ -131,48 +149,72 @@ addLayer("C", {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 }
             },
+            canAfford() {
+                return hasUpgrade("C", 32)
+            }
         },
         43: {
             title: "Supercore Industry",
             description: "9x Supercores",
             cost: new Decimal(1),
             branches: [53],
+            canAfford() {
+                return hasUpgrade("C", 33)
+            }
         },
         44: {
             title: "Supercore Shopping",
             description: "Double all supercore buyable caps",
             cost: new Decimal(2),
             branches: [54, 55],
+            canAfford() {
+                return hasUpgrade("C", 33)
+            }
         },
         51: {
             title: "Point Planet",
             description: "100x Points",
             cost: new Decimal(3),
             branches: [],
+            canAfford() {
+                return hasUpgrade("C", 41)
+            }
         },
         52: {
             title: "Super System",
             description: "100x Super",
             cost: new Decimal(4),
             branches: [],
+            canAfford() {
+                return hasUpgrade("C", 42)
+            }
         },
         53: {
             title: "Supercore Star",
             description: "100x Supercores",
             cost: new Decimal(5),
             branches: [],
+            canAfford() {
+                return hasUpgrade("C", 43)
+            }
         },
         54: {
             title: "SuperchargeBoost?",
             description: "Supercharge cost is always 1000 BUT you can Buymax. You can also have decimal amount.",
             cost: new Decimal(3),
             branches: [64],
+            canAfford() {
+                return hasUpgrade("C", 44)
+            }
         },
         55: {
             title: "Supercharge^14",
             description: "Supercharge purcahse limit is ^14 but is applied first (5^14)",
             cost: new Decimal(2),
             branches: [64],
+            canAfford() {
+                return hasUpgrade("C", 44)
+            }
         },
     },
     milestones: {
