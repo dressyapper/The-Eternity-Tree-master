@@ -87,7 +87,7 @@ addLayer("C", {
         },
         41: {
             title: "Conceptpoints",
-            description: "Concepts boosts points",
+            description: "Total Concepts boosts points",
             cost: new Decimal(2),
             branches: [51],
             effectCap() {
@@ -98,7 +98,7 @@ addLayer("C", {
             },
             effect() {
                 let cap = this.effectCap()
-                let eff = player[this.layer].points.add(1).pow(2)
+                let eff = player[this.layer].total.add(1).pow(2)
 
                 if (eff.gte(cap)) {
                     return cap
@@ -121,7 +121,7 @@ addLayer("C", {
         },
         42: {
             title: "SuperConcept",
-            description: "Concepts boosts Super",
+            description: "Total Concepts boosts Super",
             cost: new Decimal(2),
             branches: [52],
             effectCap() {
@@ -132,7 +132,7 @@ addLayer("C", {
             },
             effect() {
                 let cap = this.effectCap()
-                let eff = player[this.layer].points.add(1).pow(1.5)
+                let eff = player[this.layer].total.add(1).pow(1.5)
 
                 if (eff.gte(cap)) {
                     return cap
