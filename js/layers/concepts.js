@@ -322,13 +322,13 @@ addLayer("C", {
                 return x
             },
             goalDescription() {
-                return "Get 1e6 B"
+                return "Never"
             },
             canComplete(){
-                return player.B.points.gte(1e6)
+                return false
             },
             unlocked() { 
-                return (true) 
+                return (false) 
             },
             rewardEffect() {
                 return new Decimal(2)
