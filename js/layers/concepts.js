@@ -39,42 +39,36 @@ addLayer("C", {
             description: "Unlock the Concept tree",
             branches: [21,22],
             cost: new Decimal(0),
-            unlocked() {return player.C.total.gte(1)}
         },
         21: {
             title: "Point flow",
             description: "4x points",
             cost: new Decimal(1),
             branches: [31],
-            unlocked() {return hasUpgrade("C", 11)}
         },
         22: {
             title: "Super Increase",
             description: "2x super",
             cost: new Decimal(1),
             branches: [32,33],
-            unlocked() {return hasUpgrade("C", 11)}
         },
         31: {
             title: "Point factory",
             description: "16x points",
             cost: new Decimal(1),
             branches: [41],
-            unlocked() {return hasUpgrade("C", 21)}
         },
         32: {
             title: "Super Increment",
             description: "4x super",
             cost: new Decimal(1),
             branches: [42],
-            unlocked() {return hasUpgrade("C", 22)}
         },
         33: {
             title: "Supercore Robots",
             description: "3x Supercores",
             cost: new Decimal(1),
             branches: [43,44],
-            unlocked() {return hasUpgrade("C", 22)}
         },
         41: {
             title: "Conceptpoints",
@@ -106,7 +100,6 @@ addLayer("C", {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 }
             },
-            unlocked() {return hasUpgrade("C", 32)}
         },
         42: {
             title: "SuperConcept",
@@ -138,56 +131,48 @@ addLayer("C", {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 }
             },
-            unlocked() {return hasUpgrade("C", 32)}
         },
         43: {
             title: "Supercore Industry",
             description: "9x Supercores",
             cost: new Decimal(1),
             branches: [53],
-            unlocked() {return hasUpgrade("C", 33)}
         },
         44: {
             title: "Supercore Shopping",
             description: "Double all supercore buyable caps",
             cost: new Decimal(2),
             branches: [54, 55],
-            unlocked() {return hasUpgrade("C", 33)}
         },
         51: {
             title: "Point Planet",
             description: "100x Points",
             cost: new Decimal(3),
             branches: [],
-            unlocked() {return hasUpgrade("C", 41)}
         },
         52: {
             title: "Super System",
             description: "100x Super",
             cost: new Decimal(4),
             branches: [],
-            unlocked() {return hasUpgrade("C", 42)}
         },
         53: {
             title: "Supercore Star",
             description: "100x Supercores",
             cost: new Decimal(5),
             branches: [],
-            unlocked() {return hasUpgrade("C", 43)}
         },
         54: {
             title: "SuperchargeBoost?",
             description: "Supercharge cost is always 1000 BUT you can Buymax. You can also have decimal amount.",
             cost: new Decimal(3),
             branches: [64],
-            unlocked() {return hasUpgrade("C", 44)}
         },
         55: {
             title: "Supercharge^14",
             description: "Supercharge purcahse limit is ^14 but is applied first (5^14)",
             cost: new Decimal(2),
             branches: [64],
-            unlocked() {return hasUpgrade("C", 44)}
         },
     },
     milestones: {
@@ -214,6 +199,12 @@ addLayer("C", {
             effectDescription: "2x Concepts",
             unlocked() {return true},
             done() {return player.C.total.gte(15)},
+        },
+        5: {
+            requirementDescription: "30 Total Concepts",
+            effectDescription: "Unlock Challenges",
+            unlocked() {return true},
+            done() {return player.C.total.gte(32)},
         },
     
     },
@@ -321,6 +312,39 @@ addLayer("C", {
                 return document.URL.split("/")[0] == "file:"
             }
             
+        },
+    },
+    challenges: {
+        11: {
+            name: "Chopped Point Count",
+            challengeDescription() { 
+                let x = "LP is divided by /"+this.inChallengeEffect()
+                return x
+            },
+            goalDescription() {
+                return "Get 1e6 B"
+            },
+            canComplete(){
+                return player.B.points.gte(1e6)
+            },
+            unlocked() { 
+                return (true) 
+            },
+            rewardEffect() {
+                return new Decimal(2)
+            },
+            inChallengeEffect() {
+                return new Decimal(4)
+            },
+            currencyDisplayName: "points",
+            completionLimit: 1,
+            rewardDescription() {
+                let x = "Boost points by "+this.rewardEffect()+"x and more upgrades"
+                return x
+            },
+            onEnter() {
+                player.points = player.points
+            }
         },
     },
     tabFormat: {
