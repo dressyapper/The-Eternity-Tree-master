@@ -44,6 +44,11 @@ addLayer("S", {
             player.S.supercores = player.S.supercores.add(layerS.getcoregain().times(tmp.S.coremult).times(0.05).times(dt))
         }
     },
+    passiveGeneration() {
+        let pg = 0
+        if (hasUpgrade("C", 61)) pg = new Decimal(1)
+        return pg
+    },
     corecostbase() {
         let c = new Decimal(500000)
 

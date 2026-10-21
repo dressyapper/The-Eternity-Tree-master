@@ -174,8 +174,8 @@ addLayer("C", {
         51: {
             title: "Point Planet",
             description: "100x Points",
-            cost: new Decimal(3),
-            branches: [],
+            cost: new Decimal(2),
+            branches: [61],
             canAfford() {
                 return hasUpgrade("C", 41)
             }
@@ -183,8 +183,8 @@ addLayer("C", {
         52: {
             title: "Super System",
             description: "100x Super",
-            cost: new Decimal(4),
-            branches: [],
+            cost: new Decimal(3),
+            branches: [61],
             canAfford() {
                 return hasUpgrade("C", 42)
             }
@@ -192,8 +192,8 @@ addLayer("C", {
         53: {
             title: "Supercore Star",
             description: "100x Supercores",
-            cost: new Decimal(5),
-            branches: [],
+            cost: new Decimal(2),
+            branches: [61],
             canAfford() {
                 return hasUpgrade("C", 43)
             }
@@ -202,7 +202,7 @@ addLayer("C", {
             title: "SuperchargeBoost?",
             description: "Supercharge cost is always 1000 BUT you can Buymax. You can also have decimal amount.",
             cost: new Decimal(3),
-            branches: [64],
+            branches: [61],
             canAfford() {
                 return hasUpgrade("C", 44)
             }
@@ -211,11 +211,20 @@ addLayer("C", {
             title: "Supercharge^14",
             description: "Supercharge purcahse limit is ^14 but is applied first (5^14)",
             cost: new Decimal(2),
-            branches: [64],
+            branches: [61],
             canAfford() {
                 return hasUpgrade("C", 44)
             }
         },
+        61: {
+            title: "Pgen",
+            description: "Generate 100% of your super on reset",
+            cost: new Decimal(5),
+            branches: [64],
+            canAfford() {
+                return hasUpgrade("C", 51) && hasUpgrade("C", 52) && hasUpgrade("C", 53) && hasUpgrade("C", 54) && hasUpgrade("C", 55)
+            }
+        }
     },
     milestones: {
         1: {
