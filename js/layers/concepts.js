@@ -255,7 +255,7 @@ addLayer("C", {
             requirementDescription: "30 Total Concepts",
             effectDescription: "Unlock Challenges",
             unlocked() {return true},
-            done() {return player.C.total.gte(32)},
+            done() {return player.C.total.gte(30)},
         },
     
     },
