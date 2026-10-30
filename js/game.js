@@ -330,7 +330,7 @@ function gameLoop(diff) {
 		clearParticles()
 	}
 
-	if (isNaN(diff) || diff < 0) diff = 0
+	if (isNaN(diff) || diff < 0 || player.paused) diff = 0
 	if (tmp.gameEnded && !player.keepGoing) {
 		diff = 0
 		//player.tab = "tmp.gameEnded"
@@ -342,6 +342,7 @@ function gameLoop(diff) {
 		if(diff > limit)
 			diff = limit
 	}
+	gameSpeed()
 	addTime(diff)
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 
@@ -350,7 +351,7 @@ function gameLoop(diff) {
 			let layer = TREE_LAYERS[x][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-			if (layers[layer].update) layers[layer].update(diff);
+			if (layers[layer].update) {layers[layer].update(diff)};
 		}
 	}
 

@@ -126,9 +126,44 @@ addLayer("Ach", {
         },
         25: {
             name: "Cooler Concepts",
-            tooltip: "Get 10 Concepts",
+            tooltip: "Get 10 Total Concepts",
             done() {
-                return player.C.points.gte(10)
+                return player.C.total.gte(10)
+            },
+        },
+        26: {
+            name: "Challenger",
+            tooltip: "Unlock challenges in Concepts",
+            done() {
+                return hasMilestone("C", 5)
+            },
+        },
+        31: {
+            name: "Eternal Cores",
+            tooltip: "Reach 1.8e308 Supercores",
+            done() {
+                return player.S.supercores.gte("1.8e308")
+            },
+        },
+        32: {
+            name: "Amazing price scale",
+            tooltip: "Get 1 second conceptual generator",
+            done() {
+                return player.C.generator[2].amt.gte(1)
+            },
+        },
+        33: {
+            name: "Reinstalled the game",
+            tooltip: "Reset for timeline",
+            done() {
+                return player.T.total.gte(1)
+            },
+        },
+        34: {
+            name: "Fun value",
+            tooltip: "Reset timeline 9 times",
+            done() {
+                return player.T.total.gte(10)
             },
         },
     },

@@ -34,19 +34,47 @@ addLayer("S", {
         if (hasUpgrade("C", 42)) {mult = mult.times(upgradeEffect("C", 42))}
         if (hasMilestone("C", 2)) {mult = mult.times(2)}
         if (hasUpgrade("C", 52)) {mult = mult.times(100)}
+        if (hasUpgrade("C", 71)) {mult = mult.times(1e3)}
+        if (inChallenge("C", 14)) {mult = mult.pow(inChallengeEffect("C", 14))}
+        if (hasChallenge("C", 15)) {mult = mult.times(1e15)}
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
-        return new Decimal(1)
+        exp = new Decimal(1)
+
+        if (hasUpgrade("T", 12)) exp = exp.times(1.05)
+        return exp
     },
     update(dt) {
-        if (hasUpgrade("S",34) && !player.paused) {
-            player.S.supercores = player.S.supercores.add(layerS.getcoregain().times(tmp.S.coremult).times(0.05).times(dt))
+
+        {
+            let p = 0
+            if (hasUpgrade("S", 34)) {p = 0.05}
+            if (hasUpgrade("C", 74)) {p = 2}
+
+
+
+            if (player.paused) {p = 0}
+
+            player.S.supercorepassivegeneration = p
+            player.S.supercores = player.S.supercores.add(layerS.getcoregain().times(tmp.S.coremult).times(p).times(dt))
         }
+    },
+    autoUpgrade() {
+        let x = false
+
+        if (hasUpgrade("Tm", 11)) x = true
+
+        return x
     },
     passiveGeneration() {
         let pg = 0
+        if (hasMilestone("T", 2)) pg = new Decimal(0.01)
         if (hasUpgrade("C", 61)) pg = new Decimal(1)
+
+
+
+        if (player.paused || (player.S.points.gte("1.79e308") && !player.breakinf)) pg = new Decimal(0)
         return pg
     },
     corecostbase() {
@@ -54,12 +82,13 @@ addLayer("S", {
 
         c = c.div(new Decimal(1.1).pow(getBuyableAmount("S", 13)))
 
-        player.S.supercorecostbase = c.floor()
+        player.S.supercorecostbase = c.ceil()
         return c
     },
     coremult() {
         let m = new Decimal(1)
 
+        if (inChallenge("C", 11)) {m = m.div(1e6)}
         m = m.times(buyableEffect("S", 13))
         if (hasUpgrade("S",32)) {m = m.times(upgradeEffect("S", 32))}
         m = m.times(buyableEffect("S", 14))
@@ -67,13 +96,66 @@ addLayer("S", {
         if (hasUpgrade("C",43)) {m = m.times(9)}
         if (hasMilestone("C", 3)) {m = m.times(2)}
         if (hasUpgrade("C", 53)) {m = m.times(100)}
+        if (hasChallenge("C", 11)) {m = m.times(buyableEffect("S", 11))}
+        if (inChallenge("C", 14)) {m = m.pow(inChallengeEffect("C", 14))}
+        if (hasUpgrade("C", 74)) {m = m.times(1e15)}
+        if (hasChallenge("C", 15)) {m = m.times(1e15)}
+        if (player.S.supercores.gte("1.8e308")) {m = m.div(layerS.supercoresoftcap())}
+        if (hasUpgrade("T", 13)) {m = m.pow(1.15)}
 
+
+        if (inChallenge("C", 15)) {m = new Decimal(0)}
         return m
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "S", description: "S: Reset for Super", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
+    doReset(reset) {
+        if (layers[reset].row <= this.row) return 
+
+        let keep = []
+        if (hasChallenge("C",15) || hasMilestone("T", 6)) {keep.push("milestones")}
+        let buyab = {
+            "11": getBuyableAmount("S", 11),
+            "12": getBuyableAmount("S", 12),
+            "13": getBuyableAmount("S", 13),
+            "14": getBuyableAmount("S", 14),
+            "15": getBuyableAmount("S", 15),
+        }
+
+
+        layerDataReset(this.layer, keep)
+
+        if (hasMilestone("C", 6)) {
+            player.S.buyables[12] = buyab[12]
+        }
+        if (hasMilestone("C", 7)) {
+            player.S.buyables[11] = buyab[11]
+        }
+        if (hasMilestone("C", 8)) {
+            player.S.buyables[14] = buyab[14]
+        }
+        if (hasMilestone("C", 9)) {
+            player.S.buyables[15] = buyab[15]
+        }
+        if (hasMilestone("C", 10)) {
+            player.S.buyables[13] = buyab[13]
+        }
+        if (hasMilestone("T", 7)) {
+            player.S.buyables[11] = buyab[11]
+            player.S.buyables[12] = buyab[12]
+            player.S.buyables[13] = buyab[13]
+            player.S.buyables[14] = buyab[14]
+            player.S.buyables[15] = buyab[15]
+        }
+    },
+
+    onPrestige() {
+        if (player.S.points.gte("1.79e308") && !player.breakinf) {
+            player.S.points = new Decimal("1.79e308")
+        }
+    },
     branches: ["S", "C"],
     layerShown(){return true},
     upgrades: {
@@ -106,6 +188,8 @@ addLayer("S", {
             cost: new Decimal(20),
             effectCap() {
                 let cap = new Decimal(1e15)
+                
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -149,6 +233,7 @@ addLayer("S", {
             cost: new Decimal(500),
             effectCap() {
                 let cap = new Decimal(1e15)
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -205,6 +290,7 @@ addLayer("S", {
             cost: new Decimal(5e11),
             effectCap() {
                 let cap = new Decimal(100)
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -236,6 +322,7 @@ addLayer("S", {
             cost: new Decimal(5e13),
             effectCap() {
                 let cap = new Decimal(100)
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -267,6 +354,7 @@ addLayer("S", {
             cost: new Decimal(5.01e13),
             effectCap() {
                 let cap = new Decimal(5)
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -316,6 +404,7 @@ addLayer("S", {
             cost: new Decimal(4e30),
             effectCap() {
                 let cap = new Decimal(1e100)
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -353,6 +442,7 @@ addLayer("S", {
             cost: new Decimal(1e33),
             effectCap() {
                 let cap = new Decimal(1e100)
+                if (hasChallenge("C", 13)) cap = cap.times(1.5)
 
 
                 return cap
@@ -447,12 +537,18 @@ addLayer("S", {
             unlocked() {return getBuyableAmount("S", 15) >= 6 || hasAchievement("Ach",24)},
             done() {return player.S.points.gte(1e30)},
         },
+        9: {
+            requirementDescription: "1e180 Super",
+            effectDescription: "1e25x points",
+            unlocked() {return player.C.total.gte(111)},
+            done() {return player.S.points.gte(1e180)},
+        },
     },
     buyables: {
         11: {
             title: "Supercharge",
             description() {
-                return "Boost Points by +"+this.effectbase()+"x"
+                return "Boost Points by +"+format(this.effectbase())+"x"
             },
             purchaseLimit() {
                 
@@ -461,6 +557,9 @@ addLayer("S", {
                 x = x.add(new Decimal(getBuyableAmount(this.layer, 12)).times(5))
                 if (hasUpgrade("S", 33)) x = x.times(upgradeEffect("S", 33))
                 if (hasUpgrade("C", 44)) x = x.times(2)
+                if (hasUpgrade("C", 72)) x = x.times(player.S.supercores.div(1000).sqrt()).min(1e125).add(1)
+                if (hasMilestone("T", 5)) x = x.times(1e25)
+                if (hasChallenge("C", 14)) x = x.times(1.5)
                 return x
             },
             unlocked() {return true},
@@ -480,7 +579,7 @@ addLayer("S", {
             },
             canAfford() {
                 try {
-                    return player.S.supercores.gte(this.cost())
+                    return player.S.supercores.gte(this.cost()) && !inChallenge("C", 11)
                 }
                 catch {
                     return false
@@ -495,7 +594,6 @@ addLayer("S", {
                 }
                 else {
                     let buy = player[this.layer].supercores.div(1000).min(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))
-                    console.log(buy)
                     player.S.supercores = player.S.supercores.sub(this.cost().times(buy))
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(buy))
                 }
@@ -526,6 +624,7 @@ addLayer("S", {
                 let x = new Decimal(50)
                 if (hasUpgrade("S", 33)) x = x.times(upgradeEffect("S", 33))
                 if (hasUpgrade("C", 44)) x = x.times(2)
+                if (hasChallenge("C", 14)) x = x.times(1.5)
                 return x
             },
             unlocked() {return hasAchievement("Ach", 14)},
@@ -536,10 +635,10 @@ addLayer("S", {
             },
             display() {
                 if (this.purchaseLimit()) {
-                    return ""+this.description+"<br>Requires: " + format(this.cost()) + " Cores" + "<br>Bought: " + format(getBuyableAmount(this.layer, this.id)) + "/"+format(this.purchaseLimit())+"<br>Effect: "+format(buyableEffect(this.layer, this.id))+"x" 
+                    return ""+this.description+"<br>Requires: " + format(this.cost()) + " Cores" + "<br>Bought: " + format(getBuyableAmount(this.layer, this.id)) + "/"+format(this.purchaseLimit())+"<br>Effect: +"+format(buyableEffect(this.layer, this.id))+"" 
                 }
                 else {
-                    return ""+this.description+"<br>Requires: " + format(this.cost()) + " Cores" + "<br>Bought: " + format(getBuyableAmount(this.layer, this.id)) + "<br>Effect: "+format(buyableEffect(this.layer, this.id))+"x"
+                    return ""+this.description+"<br>Requires: " + format(this.cost()) + " Cores" + "<br>Bought: " + format(getBuyableAmount(this.layer, this.id)) + "<br>Effect: +"+format(buyableEffect(this.layer, this.id))+""
                 }
             },
             canAfford() {
@@ -569,9 +668,10 @@ addLayer("S", {
                 let x = new Decimal(10)
                 if (hasUpgrade("S", 33)) x = x.times(upgradeEffect("S", 33))
                 if (hasUpgrade("C", 44)) x = x.times(2)
+                if (hasChallenge("C", 14)) x = x.times(1.5)
                 return x
             },
-            unlocked() {return hasAchievement("Ach", 15)},
+            unlocked() {return hasAchievement("Ach", 15) && (getBuyableAmount("S", 11).gte(10) || player.C.total.gte(1))},
             cost(x) {
                 let c = new Decimal(10).pow(x)
                 
@@ -619,9 +719,10 @@ addLayer("S", {
                 let x = new Decimal(4)
                 if (hasUpgrade("S", 33)) x = x.times(upgradeEffect("S", 33))
                 if (hasUpgrade("C", 44)) x = x.times(2)
+                if (hasChallenge("C", 14)) x = x.times(1.5)
                 return x
             },
-            unlocked() {return hasUpgrade("S", 36)},
+            unlocked() {return hasUpgrade("S", 36) || hasMilestone("C", 8)},
             cost(x) {
                 let c = new Decimal(1e22).pow(new Decimal(x).div(30).add(1))
                 
@@ -645,7 +746,9 @@ addLayer("S", {
             },
             buy() {
                 if (player[this.layer].points.sign == -1) return
-                player.S.supercores = new Decimal(0)
+                if (!hasMilestone("T", 3)) {
+                    player.S.supercores = new Decimal(0)
+                }
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             effect(x) {
@@ -663,6 +766,7 @@ addLayer("S", {
                 let x = new Decimal(4)
                 if (hasUpgrade("S", 33)) x = x.times(upgradeEffect("S", 33))
                 if (hasUpgrade("C", 44)) x = x.times(2)
+                if (hasChallenge("C", 14)) x = x.times(1.5)
                 return x
             },
             unlocked() {return hasMilestone("S", 7)},
@@ -726,7 +830,9 @@ addLayer("S", {
                     milestone.push(6)
                 }
                 player.points = new Decimal(0)
-                layerDataReset(this.layer, ["supercores"])
+                if (!hasMilestone("T", 8)) {
+                    layerDataReset(this.layer, ["supercores"])
+                }
                 player.S.supercores = player.S.supercores.add(gain.times(tmp.S.coremult))
                 player.S.buyables[11] = buyables[0]
                 player.S.buyables[12] = buyables[1]
@@ -817,10 +923,15 @@ addLayer("S", {
                 }],
                 "blank",
                 ["display-text", function() { 
-                    if (!hasUpgrade("S", 34)) {
+                    if (!(hasUpgrade("S", 34) || hasUpgrade("C", 74))) {
                         return ""
                     }
-                    return 'You are generating '+format(layerS.getcoregain().times(tmp.S.coremult).times(0.05))+" Cores every second"
+                    return 'You are generating '+format(layerS.getcoregain().times(tmp.S.coremult).times(player.S.supercorepassivegeneration))+" Cores every second"
+                }],
+                ["display-text", function() { 
+                    if (player.S.supercores.gte('1.8e308')) {
+                        return "Your supercores are dividing supercore gain by /"+format(layerS.supercoresoftcap())
+                    }
                 }],
                 "blank",
                 ["clickable",[11]],
@@ -843,5 +954,8 @@ let layerS = {
     },
     getcorereq(x) {
         return x.pow(2).times(new Decimal(player.S.supercorecostbase))
-    }
+    },
+    supercoresoftcap() {
+        return new Decimal(1.5).pow(player.S.supercores.log(10).sub(308))
+    },
 }

@@ -11,6 +11,7 @@ function hasAchievement(layer, id) {
 }
 
 function hasChallenge(layer, id) {
+	//return ((player[layer].challenges[id]) && !tmp[layer].deactivated)
 	return ((player[layer].challenges[id]) && !tmp[layer].deactivated)
 }
 
@@ -64,6 +65,10 @@ function upgradeEffect(layer, id) {
 
 function challengeEffect(layer, id) {
 	return (tmp[layer].challenges[id].rewardEffect)
+}
+
+function inChallengeEffect(layer, id) {
+	return (tmp[layer].challenges[id].inChallengeEffect)
 }
 
 function buyableEffect(layer, id) {
